@@ -26,15 +26,16 @@ void yyerror(const char *s);
 //types
 %token  FLOAT
 %token CHAR
-%token <sval>INT
+%token INT
+%token CONSTANT
 //values
 %token <fval>FLOATVAL
 %token <ival>INTVAL
 %token <sval>CHARVAL
+%token <sval>VARIABLE
 %token IF ELSE 
 %token WHILE FOR  DO SWITCH BREAK CASE COLON
 %token MINUS PLUS MULT DIVIDE POWEROF IFAND IFOR AND OR XOR NAND
-%token <sval>VARIABLE
 %token EQUAL
 %token T_NEWLINE
 %token SEMI
@@ -84,7 +85,7 @@ line : assignment_statment SEMI code_block
  	| VARIABLE EQUAL expression SEMI code_block
  	;
 
-assignment_statment : type VARIABLE EQUAL expression
+assignment_statment : type VARIABLE EQUAL expression | constant VARIABLE EQUAL expression 
 	 | type VARIABLE 
 	 ;
 
@@ -104,8 +105,10 @@ expression:
 
 
 type : INT
- | FLOAT  
+ | FLOAT 
+ | CHAR 
  ;
+constant : CONSTANT type;
 
 val: FLOATVAL
 	|INTVAL

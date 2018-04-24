@@ -15,13 +15,15 @@ int linenum = 1;
 "switch" 		{return SWITCH;}
 "case" 		{return CASE;}
 "break" 		{return BREAK;}
+"const"			{return CONSTANT;}
+"char"            { return CHAR; }
+"else"				{return ELSE;}
 ":" 		{return COLON;}
 "==" 			{return BOOLEAN_EQUAL;}
 "<"				{return BOOLEAN_LESS;}
 ">"				{return BOOLEAN_GREATER;}
 "<="				{return BOOLEAN_LESS_EQUAL;}
 ">="				{return BOOLEAN_GREATER_EQUAL;}
-"else"				{return ELSE;}
 "="					{return EQUAL;}
 ";"					{return SEMI;}
 "+"				{return PLUS;}
@@ -40,7 +42,6 @@ int linenum = 1;
 [0-9]+          { yylval.ival = atoi(yytext); return INTVAL; }
 [0-9]+\.[0-9]+  { return FLOATVAL; }
 "'"[a-zA-Z0-9]"'"    {  return CHARVAL;}
-"char"            { return CHAR; }
 "("				{return OPENING_PAR;}
 ")"				{return CLOSING_PAR;}
 "{"				{return OPENING_CURLY;}

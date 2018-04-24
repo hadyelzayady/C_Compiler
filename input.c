@@ -1,8 +1,7 @@
 int x=2;
 if ( x ==2)
 {
-	float z=3;
-
+	const float z=3;
 }
 else if (z==4)
 {
@@ -26,7 +25,7 @@ else
 			case 23:
 				while(x==2)
 				{
-					
+
 				}
 				break;
 		}
