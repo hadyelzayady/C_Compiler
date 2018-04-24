@@ -5,7 +5,7 @@
 // stuff from flex that bison needs to know about:
 extern  int yylex();
 extern  int yyparse();
-extern int line_num;
+extern int linenum;
  extern FILE* yyin;
 void yyerror(const char *s);
 %}
@@ -32,7 +32,7 @@ void yyerror(const char *s);
 %token <ival>INTVAL
 %token <sval>CHARVAL
 %token IF ELSE 
-%token WHILE FOR
+%token WHILE FOR  DO SWITCH BREAK CASE COLON
 %token MINUS PLUS MULT DIVIDE POWEROF IFAND IFOR AND OR XOR NAND
 %token <sval>VARIABLE
 %token EQUAL
@@ -43,7 +43,7 @@ void yyerror(const char *s);
 %token BOOLEAN_EQUAL BOOLEAN_LESS BOOLEAN_GREATER BOOLEAN_LESS_EQUAL BOOLEAN_GREATER_EQUAL 
 // %start ass
 %%
-code_block  : line | if_condition |while_loop| for_loop |;
+code_block  : line | if_condition |while_loop| for_loop |do_loop|switch_case|;
 
 //
 while_loop : WHILE OPENING_PAR boolean_expression CLOSING_PAR OPENING_CURLY code_block CLOSING_CURLY code_block;
@@ -52,6 +52,12 @@ for_loop : FOR OPENING_PAR for_expression CLOSING_PAR OPENING_CURLY code_block C
 for_expression : for_init SEMI boolean_expression SEMI for_assignment;
 for_init : type VARIABLE EQUAL expression | VARIABLE EQUAL expression;
 for_assignment : VARIABLE EQUAL expression;
+//
+do_loop : DO OPENING_CURLY code_block CLOSING_CURLY WHILE OPENING_PAR boolean_expression CLOSING_PAR SEMI code_block;
+//
+switch_case : SWITCH OPENING_PAR VARIABLE CLOSING_PAR OPENING_CURLY case_block CLOSING_CURLY code_block;
+case_block : CASE val COLON code_block BREAK SEMI switch_trail;
+switch_trail : case_block | ;
 //
 if_condition : IF OPENING_PAR boolean_expression CLOSING_PAR OPENING_CURLY code_block CLOSING_CURLY if_trail;
 
@@ -82,9 +88,8 @@ assignment_statment : type VARIABLE EQUAL expression
 	 | type VARIABLE 
 	 ;
 
-expression: VARIABLE 				
-	| val						
-	| expression PLUS expression		
+expression: 
+	 expression PLUS expression		
 	| expression MINUS expression		
 	| expression MULT expression		
 	| expression POWEROF expression		
@@ -92,7 +97,10 @@ expression: VARIABLE
 	| expression AND expression
 	| expression OR expression
 	| expression XOR expression
-	| expression NAND expression;
+	| expression NAND expression
+	| VARIABLE 				
+	| val
+	;
 
 
 type : INT
@@ -127,6 +135,6 @@ int main(int argc,char**argv) {
 
 
 void yyerror(const char *s) {
-	printf("fuck you: %s\n",s); 
+	printf("error %s @ : %i\n",s,linenum); 
 	exit(-1);
 }

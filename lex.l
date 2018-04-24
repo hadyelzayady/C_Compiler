@@ -11,6 +11,11 @@ int linenum = 1;
 "if"            { return IF; }
 "while"			{return WHILE;}
 "for" 			{return FOR;}
+"do" 			{return DO;}
+"switch" 		{return SWITCH;}
+"case" 		{return CASE;}
+"break" 		{return BREAK;}
+":" 		{return COLON;}
 "==" 			{return BOOLEAN_EQUAL;}
 "<"				{return BOOLEAN_LESS;}
 ">"				{return BOOLEAN_GREATER;}
@@ -31,6 +36,7 @@ int linenum = 1;
 "xor"             { return XOR; }
 "nand"             { return NAND; }
 [ \t]           ;
+\n 				{++linenum;}
 [0-9]+          { yylval.ival = atoi(yytext); return INTVAL; }
 [0-9]+\.[0-9]+  { return FLOATVAL; }
 "'"[a-zA-Z0-9]"'"    {  return CHARVAL;}

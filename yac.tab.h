@@ -55,30 +55,35 @@ extern int yydebug;
     ELSE = 265,
     WHILE = 266,
     FOR = 267,
-    MINUS = 268,
-    PLUS = 269,
-    MULT = 270,
-    DIVIDE = 271,
-    POWEROF = 272,
-    IFAND = 273,
-    IFOR = 274,
-    AND = 275,
-    OR = 276,
-    XOR = 277,
-    NAND = 278,
-    VARIABLE = 279,
-    EQUAL = 280,
-    T_NEWLINE = 281,
-    SEMI = 282,
-    OPENING_PAR = 283,
-    CLOSING_PAR = 284,
-    OPENING_CURLY = 285,
-    CLOSING_CURLY = 286,
-    BOOLEAN_EQUAL = 287,
-    BOOLEAN_LESS = 288,
-    BOOLEAN_GREATER = 289,
-    BOOLEAN_LESS_EQUAL = 290,
-    BOOLEAN_GREATER_EQUAL = 291
+    DO = 268,
+    SWITCH = 269,
+    BREAK = 270,
+    CASE = 271,
+    COLON = 272,
+    MINUS = 273,
+    PLUS = 274,
+    MULT = 275,
+    DIVIDE = 276,
+    POWEROF = 277,
+    IFAND = 278,
+    IFOR = 279,
+    AND = 280,
+    OR = 281,
+    XOR = 282,
+    NAND = 283,
+    VARIABLE = 284,
+    EQUAL = 285,
+    T_NEWLINE = 286,
+    SEMI = 287,
+    OPENING_PAR = 288,
+    CLOSING_PAR = 289,
+    OPENING_CURLY = 290,
+    CLOSING_CURLY = 291,
+    BOOLEAN_EQUAL = 292,
+    BOOLEAN_LESS = 293,
+    BOOLEAN_GREATER = 294,
+    BOOLEAN_LESS_EQUAL = 295,
+    BOOLEAN_GREATER_EQUAL = 296
   };
 #endif
 
@@ -93,7 +98,7 @@ union YYSTYPE
 	float fval;
 	char sval[100];
 
-#line 97 "yac.tab.h" /* yacc.c:1909  */
+#line 102 "yac.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
