@@ -83,6 +83,7 @@ compartor: BOOLEAN_EQUAL
 line : assignment_statment SEMI code_block
  	| expression SEMI code_block
  	| VARIABLE EQUAL expression SEMI code_block
+ 	| code_block
  	;
 
 assignment_statment : type VARIABLE EQUAL expression | constant VARIABLE EQUAL expression 
