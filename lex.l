@@ -39,8 +39,8 @@ int linenum = 1;
 "!"             { return NOT; }
 [ \t]           ;
 \n 				{++linenum;}
-[0-9]+          { yylval.ival = atoi(yytext); return INTVAL; }
-[0-9]+\.[0-9]+  { return FLOATVAL; }
+[0-9]+          { yylval = atoi(yytext); return INTVAL; }
+[0-9]+\.[0-9]+  { yylval = atoi(yytext); return FLOATVAL; }
 "'"[a-zA-Z0-9]"'"    {  return CHARVAL;}
 "("				{return OPENING_PAR;}
 ")"				{return CLOSING_PAR;}

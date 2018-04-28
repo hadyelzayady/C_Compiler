@@ -15,11 +15,6 @@ void yyerror(const char *s);
 // arbitrary data type!  So we deal with that in Bison by defining a C union
 // holding each of the types of tokens that Flex could return, and have Bison
 // use that union instead of "int" for the definition of "yystype":
-%union {
-	int ival;
-	float fval;
-	char sval[100];
-}
 
 // define the "terminal symbol" token types I'm going to use (in CAPS
 // by convention), and associate each with a field of the union:
@@ -28,10 +23,11 @@ void yyerror(const char *s);
 %token CHAR
 %token INT
 %token CONSTANT
+%token VARIABLE
 //values
-%token <fval>FLOATVAL
-%token <ival>INTVAL
-%token <sval>CHARVAL
+%token FLOATVAL
+%token INTVAL
+%token CHARVAL
 %token IF ELSE 
 %token WHILE FOR  DO SWITCH BREAK CASE COLON
 %left MINUS PLUS MULT DIVIDE POWEROF IFAND IFOR AND OR XOR NOT
@@ -42,8 +38,6 @@ void yyerror(const char *s);
 %token OPENING_PAR CLOSING_PAR OPENING_CURLY CLOSING_CURLY
 %token BOOLEAN_EQUAL BOOLEAN_LESS BOOLEAN_GREATER BOOLEAN_LESS_EQUAL BOOLEAN_GREATER_EQUAL 
 // %start assign
-%type <ival>iexpression 
-%type <fval>fexpression 
 %%
 code_block  : line | if_condition |while_loop| for_loop |do_loop|switch_case|;
 
@@ -90,37 +84,21 @@ assignment_statment : type VARIABLE EQUAL expression | constant VARIABLE EQUAL e
 	 | type VARIABLE 
 	 ;
 
-iexpression: 
-	 iexpression PLUS iexpression	{$$ = $1 + $3;}	
-	| iexpression MINUS iexpression		
-	| iexpression MULT iexpression		
-	| iexpression POWEROF iexpression		
-	| iexpression DIVIDE iexpression		
-	| iexpression AND iexpression
-	| iexpression OR iexpression
-	| iexpression XOR iexpression
-	| iexpression NOT iexpression
-	//| VARIABLE 			
-	| INTVAL            {$$=$1;}
+expression: 
+	 expression PLUS expression	{$$ = $1 + $3;}	
+	| expression MINUS expression		
+	| expression MULT expression		
+	| expression POWEROF expression		
+	| expression DIVIDE expression		
+	| expression AND expression
+	| expression OR expression
+	| expression XOR expression
+	| expression NOT expression
+	| VARIABLE 		{$$=$1;}
+	| val            {$$=$1;}
 	; 
 
-fexpression: 
-	 fexpression PLUS fexpression	{$$ = $1 + $3;}	
-	| fexpression MINUS fexpression		
-	| fexpression MULT fexpression		
-	| fexpression POWEROF fexpression		
-	| fexpression DIVIDE fexpression		
-	| fexpression AND fexpression
-	| fexpression OR fexpression
-	| fexpression XOR fexpression
-	| fexpression NOT fexpression
-	//| VARIABLE 			
-	| FLOATVAL            {$$=$1;}
 	; 
-expression:
-	iexpression
-	|fexpression
-	;
 type : INT
  | FLOAT 
  | CHAR 
