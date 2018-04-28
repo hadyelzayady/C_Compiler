@@ -33,10 +33,10 @@ int linenum = 1;
 "^"                 { return POWEROF; }
 "&&"             { return IFAND; }
 "||"             { return IFOR; }
-"and"             { return AND; }
-"or"             { return OR; }
+"&"             { return AND; }
+"|"             { return OR; }
 "xor"             { return XOR; }
-"nand"             { return NAND; }
+"!"             { return NOT; }
 [ \t]           ;
 \n 				{++linenum;}
 [0-9]+          { yylval.ival = atoi(yytext); return INTVAL; }

@@ -32,17 +32,18 @@ void yyerror(const char *s);
 %token <fval>FLOATVAL
 %token <ival>INTVAL
 %token <sval>CHARVAL
-%token <sval>VARIABLE
 %token IF ELSE 
 %token WHILE FOR  DO SWITCH BREAK CASE COLON
-%token MINUS PLUS MULT DIVIDE POWEROF IFAND IFOR AND OR XOR NAND
-%token EQUAL
+%left MINUS PLUS MULT DIVIDE POWEROF IFAND IFOR AND OR XOR NOT
+%right EQUAL
 %token T_NEWLINE
 %token SEMI
 //format
 %token OPENING_PAR CLOSING_PAR OPENING_CURLY CLOSING_CURLY
 %token BOOLEAN_EQUAL BOOLEAN_LESS BOOLEAN_GREATER BOOLEAN_LESS_EQUAL BOOLEAN_GREATER_EQUAL 
-// %start ass
+// %start assign
+%type <ival>iexpression 
+%type <fval>fexpression 
 %%
 code_block  : line | if_condition |while_loop| for_loop |do_loop|switch_case|;
 
@@ -83,37 +84,52 @@ compartor: BOOLEAN_EQUAL
 line : assignment_statment SEMI code_block
  	| expression SEMI code_block
  	| VARIABLE EQUAL expression SEMI code_block
- 	| code_block
  	;
 
 assignment_statment : type VARIABLE EQUAL expression | constant VARIABLE EQUAL expression 
 	 | type VARIABLE 
 	 ;
 
-expression: 
-	 expression PLUS expression		
-	| expression MINUS expression		
-	| expression MULT expression		
-	| expression POWEROF expression		
-	| expression DIVIDE expression		
-	| expression AND expression
-	| expression OR expression
-	| expression XOR expression
-	| expression NAND expression
-	| VARIABLE 				
-	| val
+iexpression: 
+	 iexpression PLUS iexpression	{$$ = $1 + $3;}	
+	| iexpression MINUS iexpression		
+	| iexpression MULT iexpression		
+	| iexpression POWEROF iexpression		
+	| iexpression DIVIDE iexpression		
+	| iexpression AND iexpression
+	| iexpression OR iexpression
+	| iexpression XOR iexpression
+	| iexpression NOT iexpression
+	//| VARIABLE 			
+	| INTVAL            {$$=$1;}
+	; 
+
+fexpression: 
+	 fexpression PLUS fexpression	{$$ = $1 + $3;}	
+	| fexpression MINUS fexpression		
+	| fexpression MULT fexpression		
+	| fexpression POWEROF fexpression		
+	| fexpression DIVIDE fexpression		
+	| fexpression AND fexpression
+	| fexpression OR fexpression
+	| fexpression XOR fexpression
+	| fexpression NOT fexpression
+	//| VARIABLE 			
+	| FLOATVAL            {$$=$1;}
+	; 
+expression:
+	iexpression
+	|fexpression
 	;
-
-
 type : INT
  | FLOAT 
  | CHAR 
  ;
+ val:
+ 	INTVAL
+ 	| FLOATVAL;
 constant : CONSTANT type;
 
-val: FLOATVAL
-	|INTVAL
-	;
 
 
 

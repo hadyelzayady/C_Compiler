@@ -72,7 +72,7 @@ extern int yydebug;
     AND = 282,
     OR = 283,
     XOR = 284,
-    NAND = 285,
+    NOT = 285,
     EQUAL = 286,
     T_NEWLINE = 287,
     SEMI = 288,
