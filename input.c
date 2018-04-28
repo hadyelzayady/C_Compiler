@@ -3,7 +3,7 @@ if ( x ==2)
 {
 	const float z=3;
 }
-else if (z==4)
+else if (z==4 && x)
 {
 	
 }
@@ -38,6 +38,6 @@ for (int i = 0; i < count; i=i+1)
 {
 	
 }
-do
+repeat
 {
-} while (x==2 && y>2 || z<=4 || x-3+z <1);
+} until (x==2 && y>2 || z<=4 || x-3+z <1);

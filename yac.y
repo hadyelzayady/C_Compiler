@@ -90,7 +90,7 @@ expression:
 	 expression PLUS expression	{$$ = $1 + $3;}	
 	| expression MINUS expression {$$ = $1 - $3;}
 	| expression MULT expression {$$ = $1 * $3;}
-	| expression POWEROF expression	{$$ = pow($1,$3);}
+	| expression POWEROF expression	
 	| expression DIVIDE expression {$$ = $1 / $3;}
 	| expression AND expression {$$ = $1 & $3;}
 	| expression OR expression {$$ = $1 | $3;}
@@ -105,7 +105,7 @@ expression:
 	| expression IFAND expression {$$ = $1 && $3;}
 	| expression IFOR expression {$$ = $1 || $3;}
 	| OPENING_PAR expression CLOSING_PAR {$$ = $1;}
-	| VARIABLE 		{$$ = sym[$1];}
+	| VARIABLE 		
 	| val            {$$=$1;}
 	; 
 
