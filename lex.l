@@ -11,15 +11,17 @@ int linenum = 1;
 "if"            { return IF; }
 "while"			{return WHILE;}
 "for" 			{return FOR;}
-"do" 			{return DO;}
 "switch" 		{return SWITCH;}
 "case" 		{return CASE;}
 "break" 		{return BREAK;}
+"repeat"		{return REPEAT;}
+"until"			{return UNTIL;}
 "const"			{return CONSTANT;}
 "char"            { return CHAR; }
 "else"				{return ELSE;}
 ":" 		{return COLON;}
 "==" 			{return BOOLEAN_EQUAL;}
+"!="				{return BOOLEAN_NOT_EQUAL;}
 "<"				{return BOOLEAN_LESS;}
 ">"				{return BOOLEAN_GREATER;}
 "<="				{return BOOLEAN_LESS_EQUAL;}
