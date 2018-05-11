@@ -49,60 +49,50 @@ extern int yydebug;
     CHAR = 259,
     INT = 260,
     CONSTANT = 261,
-    FLOATVAL = 262,
-    INTVAL = 263,
-    CHARVAL = 264,
-    VARIABLE = 265,
+    VARIABLE = 262,
+    FLOATVAL = 263,
+    INTVAL = 264,
+    CHARVAL = 265,
     IF = 266,
     ELSE = 267,
     WHILE = 268,
     FOR = 269,
-    DO = 270,
-    SWITCH = 271,
-    BREAK = 272,
-    CASE = 273,
-    COLON = 274,
-    MINUS = 275,
-    PLUS = 276,
-    MULT = 277,
-    DIVIDE = 278,
-    POWEROF = 279,
-    IFAND = 280,
-    IFOR = 281,
-    AND = 282,
-    OR = 283,
-    XOR = 284,
-    NOT = 285,
-    EQUAL = 286,
-    T_NEWLINE = 287,
-    SEMI = 288,
-    OPENING_PAR = 289,
-    CLOSING_PAR = 290,
-    OPENING_CURLY = 291,
-    CLOSING_CURLY = 292,
-    BOOLEAN_EQUAL = 293,
-    BOOLEAN_LESS = 294,
-    BOOLEAN_GREATER = 295,
-    BOOLEAN_LESS_EQUAL = 296,
-    BOOLEAN_GREATER_EQUAL = 297
+    REPEAT = 270,
+    UNTIL = 271,
+    SWITCH = 272,
+    BREAK = 273,
+    CASE = 274,
+    COLON = 275,
+    MINUS = 276,
+    PLUS = 277,
+    MULT = 278,
+    DIVIDE = 279,
+    POWEROF = 280,
+    IFAND = 281,
+    IFOR = 282,
+    AND = 283,
+    OR = 284,
+    XOR = 285,
+    NOT = 286,
+    EQUAL = 287,
+    T_NEWLINE = 288,
+    SEMI = 289,
+    OPENING_PAR = 290,
+    CLOSING_PAR = 291,
+    OPENING_CURLY = 292,
+    CLOSING_CURLY = 293,
+    BOOLEAN_EQUAL = 294,
+    BOOLEAN_LESS = 295,
+    BOOLEAN_GREATER = 296,
+    BOOLEAN_LESS_EQUAL = 297,
+    BOOLEAN_GREATER_EQUAL = 298,
+    BOOLEAN_NOT_EQUAL = 299
   };
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-
-union YYSTYPE
-{
-#line 18 "yac.y" /* yacc.c:1909  */
-
-	int ival;
-	float fval;
-	char sval[100];
-
-#line 103 "yac.tab.h" /* yacc.c:1909  */
-};
-
-typedef union YYSTYPE YYSTYPE;
+typedef int YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

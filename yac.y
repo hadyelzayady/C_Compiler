@@ -2,21 +2,45 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "ST.h"
 #include <math.h>
 // stuff from flex that bison needs to know about:
 extern  int yylex();
 extern  int yyparse();
 extern int linenum;
+int errors=0;
  extern FILE* yyin;
 void yyerror(const char *s);
+/*-------------------------------------------------------------------------
+Install identifier & check if previously defined.
+-------------------------------------------------------------------------*/
+install ( char *sym_name )
+{ printf("%c\n",sym_name[0]);
+	symrec *s;
+s = getsym (sym_name);
+if (s == 0)
+s = putsym (sym_name);
+else { errors++;
+printf( "%s is already defined\n", sym_name );
+}
+}
+context_check( char *sym_name )
+{ if ( getsym( sym_name ) == 0 )
+printf( "%s is an undeclared identifier\n", sym_name );
+}
 %}
+
 
 // Bison fundamentally works by asking flex to get the next token, which it
 // returns as an object of type "yystype".  But tokens could be of any
 // arbitrary data type!  So we deal with that in Bison by defining a C union
 // holding each of the types of tokens that Flex could return, and have Bison
 // use that union instead of "int" for the definition of "yystype":
-
+%union { /* SEMANTIC RECORD */
+char *id; /* For returning identifiers */
+float f;
+int in;
+}
 // define the "terminal symbol" token types I'm going to use (in CAPS
 // by convention), and associate each with a field of the union:
 //types
@@ -24,11 +48,11 @@ void yyerror(const char *s);
 %token CHAR
 %token INT
 %token CONSTANT
-%token VARIABLE
+%token<id> VARIABLE
 //values
-%token FLOATVAL
-%token INTVAL
-%token CHARVAL
+%token<f> FLOATVAL
+%token <f>INTVAL
+%token <id>CHARVAL
 %token IF ELSE 
 %token WHILE FOR  REPEAT UNTIL SWITCH BREAK CASE COLON
 %left MINUS PLUS MULT DIVIDE POWEROF IFAND IFOR AND OR XOR NOT
@@ -56,7 +80,7 @@ switch_case : SWITCH OPENING_PAR VARIABLE CLOSING_PAR OPENING_CURLY case_block C
 case_block : CASE val COLON code_block BREAK SEMI switch_trail;
 switch_trail : case_block | ;
 //
-if_condition : IF OPENING_PAR expression CLOSING_PAR OPENING_CURLY code_block CLOSING_CURLY if_trail {$$ = $3;}
+if_condition : IF OPENING_PAR expression CLOSING_PAR OPENING_CURLY code_block CLOSING_CURLY if_trail //{$$ = $3;}
 
 if_trail :  ELSE OPENING_CURLY code_block CLOSING_CURLY code_block
 	 | ELSE if_condition
@@ -81,9 +105,10 @@ line : assignment_statment SEMI code_block
  	| VARIABLE EQUAL expression SEMI code_block
  	;
 
-assignment_statment : type VARIABLE EQUAL expression
-	 | constant VARIABLE EQUAL expression 
-	 | type VARIABLE 
+assignment_statment : type VARIABLE EQUAL expression {printf("%s h\n",$1 );
+	install($2);}
+	 | constant VARIABLE EQUAL expression {install($2);}
+	 | type VARIABLE {install($2);}
 	 ;
 
 expression: 
@@ -105,7 +130,7 @@ expression:
 	| expression IFAND expression {$$ = $1 && $3;}
 	| expression IFOR expression {$$ = $1 || $3;}
 	| OPENING_PAR expression CLOSING_PAR {$$ = $1;}
-	| VARIABLE 		
+	//| VARIABLE 		
 	| val            {$$=$1;}
 	; 
 
@@ -117,7 +142,9 @@ type : INT
  val:
  	INTVAL
  	| FLOATVAL;
-constant : CONSTANT type;
+
+constant :
+ CONSTANT type;
 
 
 
