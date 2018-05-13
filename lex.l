@@ -1,13 +1,14 @@
 %option noyywrap
 %{
+#include "types.h"
 #include <stdio.h>
 #include "yac.tab.h"
 #define YY_DECL int yylex()
 int linenum = 1;
 %}
 %%
-"int"            { return INT; }
-"float"            { return FLOAT; }
+"int"            {yylval.valtype = strdup(yytext);  return INT; }
+"float"            { yylval.valtype = strdup(yytext);return FLOAT; }
 "if"            { return IF; }
 "while"			{return WHILE;}
 "for" 			{return FOR;}
@@ -17,7 +18,8 @@ int linenum = 1;
 "repeat"		{return REPEAT;}
 "until"			{return UNTIL;}
 "const"			{return CONSTANT;}
-"char"            { return CHAR; }
+"default"		{return DEFAULT;}
+"char"            {yylval.valtype = strdup(yytext); return CHAR; }
 "else"				{return ELSE;}
 ":" 		{return COLON;}
 "==" 			{return BOOLEAN_EQUAL;}
@@ -33,20 +35,20 @@ int linenum = 1;
 "*"                 { return MULT; }
 "/"                 { return DIVIDE; }
 "^"                 { return POWEROF; }
-"&&"             { return IFAND; }
+"&&"             { return IFAND;}
 "||"             { return IFOR; }
 "&"             { return AND; }
 "|"             { return OR; }
 "xor"             { return XOR; }
 "!"             { return NOT; }
-[ \t]           ;
-\n 				{++linenum;}
-[0-9]+          { yylval = atoi(yytext); return INTVAL; }
-[0-9]+\.[0-9]+  { yylval = atoi(yytext); return FLOATVAL; }
-"'"[a-zA-Z0-9]"'"    {  return CHARVAL;}
+[0-9]+          { yylval.iValue = atoi(yytext); return INTVAL; }
+[0-9]+\.[0-9]+  { yylval.fValue = atof(yytext); return FLOATVAL; }
+"'"[a-zA-Z0-9]"'"    {yylval.cValue=*yytext  ;return CHARVAL;}
 "("				{return OPENING_PAR;}
 ")"				{return CLOSING_PAR;}
 "{"				{return OPENING_CURLY;}
 "}"				{return CLOSING_CURLY;}
-[a-zA-Z][a-zA-Z0-9_]* { return VARIABLE; }
+[a-zA-Z][a-zA-Z0-9_]* { yylval.id=strdup(yytext);  return VARIABLE;}
+[ \t]           ;
+\n 				{++linenum;}
 %%

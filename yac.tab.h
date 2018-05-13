@@ -63,36 +63,52 @@ extern int yydebug;
     BREAK = 273,
     CASE = 274,
     COLON = 275,
-    MINUS = 276,
-    PLUS = 277,
-    MULT = 278,
-    DIVIDE = 279,
-    POWEROF = 280,
-    IFAND = 281,
-    IFOR = 282,
-    AND = 283,
-    OR = 284,
-    XOR = 285,
-    NOT = 286,
-    EQUAL = 287,
-    T_NEWLINE = 288,
-    SEMI = 289,
-    OPENING_PAR = 290,
-    CLOSING_PAR = 291,
-    OPENING_CURLY = 292,
-    CLOSING_CURLY = 293,
-    BOOLEAN_EQUAL = 294,
-    BOOLEAN_LESS = 295,
-    BOOLEAN_GREATER = 296,
-    BOOLEAN_LESS_EQUAL = 297,
-    BOOLEAN_GREATER_EQUAL = 298,
-    BOOLEAN_NOT_EQUAL = 299
+    DEFAULT = 276,
+    T_NEWLINE = 277,
+    SEMI = 278,
+    MINUS = 279,
+    PLUS = 280,
+    MULT = 281,
+    DIVIDE = 282,
+    POWEROF = 283,
+    IFAND = 284,
+    IFOR = 285,
+    AND = 286,
+    OR = 287,
+    XOR = 288,
+    NOT = 289,
+    EQUAL = 290,
+    OPENING_PAR = 291,
+    CLOSING_PAR = 292,
+    OPENING_CURLY = 293,
+    CLOSING_CURLY = 294,
+    BOOLEAN_EQUAL = 295,
+    BOOLEAN_LESS = 296,
+    BOOLEAN_GREATER = 297,
+    BOOLEAN_LESS_EQUAL = 298,
+    BOOLEAN_GREATER_EQUAL = 299,
+    BOOLEAN_NOT_EQUAL = 300
   };
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+
+union YYSTYPE
+{
+#line 82 "yac.y" /* yacc.c:1909  */
+ /* SEMANTIC RECORD */
+char *id; /* For returning identifiers */
+char *valtype;
+float fValue;
+int iValue;
+char cValue;
+nodeType *nPtr; /* node pointer */
+
+#line 109 "yac.tab.h" /* yacc.c:1909  */
+};
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
