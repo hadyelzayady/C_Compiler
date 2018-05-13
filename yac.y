@@ -14,6 +14,8 @@ nodeType *id(char* var);
 nodeType *icon(int value);
 nodeType *fcon(float value);
 nodeType *chcon(char value);
+void freeNode(nodeType *p);
+int ex(nodeType *p);
 int errors=0;
 extern int linenum;
 extern  int yylex();
@@ -112,9 +114,10 @@ nodeType *nPtr; /* node pointer */
 %left BOOLEAN_EQUAL BOOLEAN_LESS BOOLEAN_GREATER BOOLEAN_LESS_EQUAL BOOLEAN_GREATER_EQUAL BOOLEAN_NOT_EQUAL
 %type <valtype> type constant
  %type <nPtr>  assignment_statment line while_loop for_loop  for_assignment repeat_loop if_condition if_trail expression code_block case_block switch_case switch_trail
-//%type <nPtr>  expression line assignment_statment
+//%type <nPtr>  expression line assignment_statment 
 // %start assign
 %%
+
  code_block  : line | if_condition |while_loop| for_loop |repeat_loop|switch_case|{$$=NULL;};
 
 while_loop : WHILE OPENING_PAR expression CLOSING_PAR OPENING_CURLY code_block CLOSING_CURLY code_block{$$=opr(WHILE,3,$3,$6,$8);};
@@ -127,7 +130,7 @@ for_assignment : VARIABLE EQUAL expression{$$=opr(EQUAL,2,id($1),$3);};
 repeat_loop : REPEAT OPENING_CURLY code_block CLOSING_CURLY UNTIL OPENING_PAR expression CLOSING_PAR SEMI code_block
 {$$=opr(REPEAT,3,$3,$7,$10);};
 //
-switch_case : SWITCH OPENING_PAR VARIABLE CLOSING_PAR OPENING_CURLY case_block DEFAULT code_block CLOSING_CURLY code_block{$$=opr(SWITCH,3,id($3),$6,$8);};
+switch_case : SWITCH OPENING_PAR VARIABLE CLOSING_PAR OPENING_CURLY case_block DEFAULT COLON code_block CLOSING_CURLY code_block{$$=opr(SWITCH,4,id($3),$6,$9,$11);};
 case_block : CASE expression COLON code_block BREAK SEMI switch_trail {$$=opr(CASE,3,$2,$4,$7);};
 switch_trail : case_block | {$$=NULL;};
 //
@@ -202,7 +205,7 @@ assignment_statment : type VARIABLE EQUAL expression {
 	 ;
 
 expression: 
-	  expression PLUS expression	{$$ = opr('+', 2, $1, $3);}	
+	  expression PLUS expression	{$$ = opr(PLUS, 2, $1, $3);}	
 	| expression MINUS expression {$$ = opr(MINUS, 2, $1, $3);}
 	| expression MULT expression {$$ = opr(MULT, 2, $1, $3);}
 	| expression DIVIDE expression {$$ = opr(DIVIDE, 2, $1, $3);}
@@ -250,12 +253,12 @@ nodeType *opr(int oper, int nops, ...) {
 	 p->opr.oper = oper;
 	 p->opr.nops = nops;
 	 va_start(ap, nops);
-	 
 	 for ( i = 0; i < nops; i++)
  	{ 	
  	p->opr.op[i] = va_arg(ap, nodeType*);
- 	
-	if(i>0)
+ 	if(oper==MINUS ||  oper==PLUS ||  oper==MULT ||  oper==DIVIDE ||  oper==POWEROF ||  oper==IFAND ||  oper==IFOR ||  oper==AND ||  oper==OR ||  oper==XOR || oper==NOT ||  oper==BOOLEAN_EQUAL ||  oper==BOOLEAN_LESS ||  oper==BOOLEAN_GREATER || oper==BOOLEAN_LESS_EQUAL ||  oper==BOOLEAN_GREATER_EQUAL ||  oper==BOOLEAN_NOT_EQUAL || oper==EQUAL)
+	{	
+		if(i>0)
 		{	
 			if((p->opr.op[0])->type==typeCon)
 				{	
@@ -329,6 +332,7 @@ nodeType *opr(int oper, int nops, ...) {
 				
 		}
  	}
+ }
  	va_end(ap);
  return p;
 

@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "ST.h"
-#include "y.tab.h"
+#include "types.h"
+#include "yac.tab.h"
 
 static int lbl;
 static int t;
@@ -14,11 +14,12 @@ int ex(nodeType *p)
 	switch (p->type)
 	{
 		case typeCon:
-			printf("\t%d", p->con.value);
-			return p->con.value;
+			if(strcmp(p->con.type,"int")==0) printf("\t%d", p->con.value.i);
+			else if(strcmp(p->con.type,"float")==0) printf("\t%f", p->con.value.f);
+			else printf("\t%c", p->con.value.ch);
 			break;
 		case typeId:
-			printf("\t%c", p->id.i + 'a');
+			printf("\t%s", p->id.var);
 			break;
 		case typeOpr:
 			switch (p->opr.oper)
@@ -66,21 +67,21 @@ int ex(nodeType *p)
 					ex(p->opr.op[4]);
 					break;
 				case NOT:
-					if (p->opr.op[0].type == typeOpr)
+					if ((p->opr.op[0])->type == typeOpr)
 					{
 						tn = ex(p->opr.op[0]);
 					}
 
 					printf("\tnot\t");
-					if (p->opr.op[0].type == typeCon)
+					if ((p->opr.op[0])->type == typeCon)
 					{
 						ex(p->opr.op[0]);
 					}
-					else if (p->opr.op[0].type == typeId)
+					else if ((p->opr.op[0])->type == typeId)
 					{
 						ex(p->opr.op[0]);
 					}
-					else if (p->opr.op[0].type == typeOpr)
+					else if ((p->opr.op[0])->type == typeOpr)
 					{
 						printf("\tt%d\t", tn);
 					}
@@ -89,38 +90,38 @@ int ex(nodeType *p)
 					break;
 
 				case EQUAL:
-					if (p->opr.op[1].type == typeCon)
+					if ((p->opr.op[1])->type == typeCon)
 					{
 						printf("\tEqual\t");
 						ex(p->opr.op[1]);
-						printf("\t%c\n", p->opr.op[0]->id.i + 'a');
+						printf("\t%s\n", p->opr.op[0]->id.var);
 					}
-					else if (p->opr.op[1].type == typeId)
+					else if ((p->opr.op[1])->type == typeId)
 					{
 						printf("\tEqual\t");
 						ex(p->opr.op[1]);
-						printf("\t%c\n", p->opr.op[0]->id.i + 'a');
+						printf("\t%s\n", p->opr.op[0]->id.var);
 					}
-					else if (p->opr.op[1].type == typeOpr)
+					else if ((p->opr.op[1])->type == typeOpr)
 					{
 						tn = ex(p->opr.op[1]);
 						printf("\tEqual\t");
-						printf("\tt%d\t"tn);
-						printf("\t%c\n", p->opr.op[0]->id.i + 'a');
+						printf("\tt%d\t",tn);
+						printf("\t%s\n", p->opr.op[0]->id.var);
 					}
 					break;
 				default:
 					// ex(p->opr.op[0]);
 					// ex(p->opr.op[1]);
-					if (p->opr.op[0].type == typeOpr)
+					if ((p->opr.op[0])->type == typeOpr)
 					{
 						tn = ex(p->opr.op[0]);
 					}
-					if (p->opr.op[1].type == typeOpr)
+					if ((p->opr.op[1])->type == typeOpr)
 					{
 						tn = ex(p->opr.op[1]);
 					}
-					switch (ex(p->opr.oper))
+					switch (p->opr.oper)
 					{
 						case PLUS: printf("\tadd\t"); break;
 						case MINUS: printf("\tsub\t"); break;
@@ -138,28 +139,28 @@ int ex(nodeType *p)
 						case BOOLEAN_LESS_EQUAL: printf("\t<=\t"); break;
 						case BOOLEAN_GREATER_EQUAL: printf("\t>=\t"); break;
 					}
-					if (p->opr.op[0].type == typeCon)
+					if ((p->opr.op[0])->type == typeCon)
 					{
 						ex(p->opr.op[0]);
 					}
-					else if (p->opr.op[0].type == typeId)
+					else if ((p->opr.op[0])->type == typeId)
 					{
 						ex(p->opr.op[0]);
 					}
-					else if (p->opr.op[0].type == typeOpr)
+					else if ((p->opr.op[0])->type == typeOpr)
 					{
 						printf("\tt%d\t", tn);
 					}
 
-					if (p->opr.op[1].type == typeCon)
+					if ((p->opr.op[1])->type == typeCon)
 					{
 						ex(p->opr.op[1]);
 					}
-					else if (p->opr.op[1].type == typeId)
+					else if ((p->opr.op[1])->type == typeId)
 					{
 						ex(p->opr.op[1]);
 					}
-					else if (p->opr.op[1].type == typeOpr)
+					else if ((p->opr.op[1])->type == typeOpr)
 					{
 						printf("\tt%d\t", tn);
 					}
